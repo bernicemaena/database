@@ -1,0 +1,40 @@
+create database expensetracker;
+
+
+
+CREATE TABLE signup(
+      id int AUTO_INCREMENT PRIMARY KEY,
+      name varchar(50) not null,
+      password varchar(50) not null,      
+      emailaddress varchar(50) not null     
+     );
+
+
+CREATE TABLE items(
+      id int AUTO_INCREMENT PRIMARY KEY,
+      name varchar(50) not null,
+       cost DECimal(9, 9) default 0.0,
+      frequency enum('DAILY', 'WEEKLY', 'MONTHLY', 'ANNUALLY', 'NONE'),
+      user_id int not null,
+       FOREIGN key(user_id) REFERENCES signup(id)
+    
+    );
+
+
+alter table signup add COLUMN earning decimal(9, 9) default 0.0;
+alter table signup add COLUMN earning_for enum('DAILY', 'WEEKLY', 'MONTHLY', 'ANNUALLY') default 'MONTHLY';
+alter table signup add COLUMN planning_for enum('DAILY', 'WEEKLY', 'MONTHLY', 'ANNUALLY') default 'MONTHLY';
+
+
+ALTER TABLE `signup` CHANGE `earning_for` `earning_for` ENUM('DAY','WEEK','MONTH','YEAR') CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'MONTH';
+
+alter table signup rename to users;
+
+
+alter table items add column priority enum('LOW', 'HIGH', 'MEDIUM') default 'MEDIUM';
+
+
+CREATE TABLE `expensetracker`.`Expenses` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(50) NOT NULL , `start_from` DATE NULL DEFAULT NULL , `end_at` DATE NULL DEFAULT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+alter table expenses add column user_id int not null;
+alter table expenses add FOREIGN key(user_id) REFERENCES users(id) on delete cascade;
